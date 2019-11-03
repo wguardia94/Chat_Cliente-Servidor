@@ -19,35 +19,34 @@ public class Enviar implements Runnable {
 	}
 
 	public void run() {
-		String jPaquete="";
+		String jPaquete = "";
 
 		Scanner scanner = new Scanner(this.usuario.getInputStream());
 		while (scanner.hasNextLine()) {
 			jPaquete = scanner.nextLine();
 			Gson json = new Gson();
-			
+
 			Paquete miPaq = json.fromJson(jPaquete, Paquete.class);
-			
 
 			switch (miPaq.getTipo()) {
 			case "paqueteclases.Mensaje":
 				Mensaje msj = (Mensaje) miPaq.getMensaje();
-				if(msj.getTipo()=='B') {
-					
+				if (msj.getTipo() == 'B') {
+
 					servidor.reenvioDeMensajes(jPaquete);
-				}else {
+				} else {
 					servidor.enviarMensaje(jPaquete);
 				}
 
 				break;
 
 			case "UsuarioAB":
-				
+
 				break;
-			
-			}	
+
+			}
 		}
-		servidor.eliminarUsuario(usuario,jPaquete);
+		servidor.eliminarUsuario(usuario, jPaquete);
 		scanner.close();
 	}
 }
